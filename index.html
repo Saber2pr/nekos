@@ -368,7 +368,7 @@ function getApiUrl() {
 
             } catch (error) {
                 console.error(error);
-                grid.innerHTML = `<div class="status-msg" style="color: #ef4444;">数据请求失败，请稍后再试。</div>`;
+                grid.innerHTML = `<div class="status-msg" style="color: #ef4444;">数据请求失败，请稍后再试。<a href="http://cors-anywhere.herokuapp.com/corsdemo">cors</a></div>`;
             }
 
             btnPrev.disabled = (offset === 0);
