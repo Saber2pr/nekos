@@ -232,6 +232,34 @@ a {
             font-variant-numeric: tabular-nums;
         }
 
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-jump input {
+            width: 50px;
+            padding: 8px 6px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #1e2942;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-align: center;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .page-jump input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .page-jump .btn-go {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
         .status-msg {
             grid-column: 1 / -1;
             text-align: center;
@@ -278,6 +306,10 @@ a {
     <div class="controls">
         <button class="btn" id="btnPrev" disabled="">PREV</button>
         <div class="page-info" id="pageInfo">第 1 页</div>
+        <div class="page-jump">
+            <input type="number" id="jumpInput" min="1" placeholder="页码">
+            <button class="btn btn-go" id="btnJump">GO</button>
+        </div>
         <button class="btn" id="btnNext">NEXT</button>
     </div>
 
@@ -296,6 +328,8 @@ a {
         const pageInfo = document.getElementById('pageInfo');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
+        const jumpInput = document.getElementById('jumpInput');
+        const btnJump = document.getElementById('btnJump');
 function getApiUrl() {
     const targetUrl = `https://api.nekosapi.com/v4/images?limit=${LIMIT}&offset=${offset}&rating=explicit`;
     
@@ -387,6 +421,23 @@ function getApiUrl() {
             offset += LIMIT;
             currentPage++;
             loadImages();
+        });
+
+        function jumpToPage(page) {
+            page = parseInt(page);
+            if (isNaN(page) || page < 1) return;
+            currentPage = page;
+            offset = (page - 1) * LIMIT;
+            jumpInput.value = '';
+            loadImages();
+        }
+
+        btnJump.addEventListener('click', () => {
+            jumpToPage(jumpInput.value);
+        });
+
+        jumpInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') jumpToPage(jumpInput.value);
         });
 
         // 初始化加载
